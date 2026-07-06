@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maybank | Secure Document Upload Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-primary: #f4f6f9;
+      --bg-secondary: #ffffff;
+      --bg-tertiary: #f8fafc;
+      --maybank-yellow: #ffcc00;
+      --maybank-yellow-hover: #e6b800;
+      --maybank-yellow-glow: rgba(255, 204, 0, 0.2);
+      --text-primary: #1e1e1e;
+      --text-secondary: #556987;
+      --text-muted: #8896ab;
+      --border-color: #cbd5e1;
+      --color-success: #10b981;
+      --color-info: #0ea5e9;
+      --color-warning: #f59e0b;
+      
+      --font-headings: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition-smooth: all 0.25s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: radial-gradient(circle at top right, rgba(255, 204, 0, 0.1), transparent 45%),
+                  radial-gradient(circle at bottom left, rgba(14, 165, 233, 0.05), transparent 40%),
+                  #f4f6f9;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 580px;
+      perspective: 1000px;
+    }
+
+    /* Portal Card layout */
+    .portal-card {
+      background-color: var(--bg-secondary);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      box-shadow: var(--shadow-lg);
+      padding: 35px 30px;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition-smooth);
+    }
+
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, var(--maybank-yellow) 0%, #1e1e1e 100%);
+    }
+
+    /* Header styling */
+    .portal-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .brand-logo i {
+      color: var(--text-primary);
+      font-size: 28px;
+    }
+
+    .brand-logo h1 {
+      font-family: var(--font-headings);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-logo .bold {
+      color: var(--text-primary);
+    }
+
+    .brand-logo .accent {
+      background: linear-gradient(135deg, #1e1e1e 0%, #444444 100%);
+      color: var(--maybank-yellow);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 20px;
+      margin-left: 2px;
+    }
+
+    .secure-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: rgba(16, 185, 129, 0.08);
+      color: var(--color-success);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    /* Welcome / Meta Section */
+    .case-details-box {
+      background-color: var(--bg-tertiary);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      padding: 18px 20px;
+      margin-bottom: 25px;
+    }
+
+    .welcome-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .welcome-text strong {
+      color: var(--text-primary);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding-top: 12px;
+    }
+
+    .meta-item {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .meta-item span {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-top: 2px;
+    }
+
+    /* Upload box styling */
+    .upload-group {
+      margin-bottom: 24px;
+    }
+
+    .upload-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .upload-dropzone {
+      background-color: var(--bg-tertiary);
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+      padding: 28px 20px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-smooth);
+    }
+
+    .upload-dropzone:hover {
+      border-color: var(--maybank-yellow);
+      background-color: var(--maybank-yellow-glow);
+    }
+
+    .upload-dropzone.dragover {
+      border-color: var(--color-info);
+      background-color: rgba(14, 165, 233, 0.08);
+    }
+
+    .dropzone-icon {
+      font-size: 34px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      transition: var(--transition-smooth);
+    }
+
+    .upload-dropzone:hover .dropzone-icon {
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    .dropzone-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .dropzone-hint {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    /* Preview area */
+    .file-preview {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      text-align: left;
+      animation: slideIn 0.2s ease forwards;
+    }
+
+    .preview-thumbnail {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid var(--border-color);
+      background-color: #fff;
+    }
+
+    .preview-pdf-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 6px;
+      background-color: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .preview-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .preview-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .preview-size {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .remove-file-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 5px;
+      transition: var(--transition-smooth);
+    }
+
+    .remove-file-btn:hover {
+      color: #ef4444;
+    }
+
+    /* Button and Form elements */
+    .form-actions {
+      margin-top: 30px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background-color: var(--maybank-yellow);
+      color: #1e1e1e;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--font-headings);
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px var(--maybank-yellow-glow);
+      transition: var(--transition-smooth);
+    }
+
+    .btn-submit:hover {
+      background-color: var(--maybank-yellow-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(255, 204, 0, 0.35);
+    }
+
+    .btn-submit:disabled {
+      background-color: #e2e8f0;
+      border-color: #cbd5e1;
+      color: var(--text-muted);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Processing Overlay */
+    .processing-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.96);
+      z-index: 10;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .spinner {
+      color: var(--text-primary);
+      font-size: 45px;
+      margin-bottom: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    .processing-title {
+      font-family: var(--font-headings);
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .processing-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 25px;
+    }
+
+    .progress-bar-container {
+      width: 80%;
+      height: 6px;
+      background-color: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--maybank-yellow) 0%, var(--text-primary) 100%);
+      transition: width 0.1s linear;
+    }
+
+    /* Success Screen */
+    .success-container {
+      display: none;
+      text-align: center;
+      animation: zoomIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .success-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background-color: rgba(16, 185, 129, 0.08);
+      border: 2px solid var(--color-success);
+      color: var(--color-success);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 10px auto 20px auto;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
+    }
+
+    .success-title {
+      font-family: var(--font-headings);
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .success-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .receipt-card {
+      background-color: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      margin-bottom: 25px;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+    }
+
+    .receipt-row .label {
+      color: var(--text-secondary);
+    }
+
+    .receipt-row .value {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .close-notice {
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    /* Keyframes animations */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Active Upload Form View -->
+    <div class="portal-card" id="form-view">
+      
+      <!-- Processing Overlay -->
+      <div class="processing-overlay" id="upload-overlay">
+        <i class="fa-solid fa-circle-notch spinner"></i>
+        <div class="processing-title" id="processing-step">Encrypting Document Package</div>
+        <div class="processing-desc">Establishing secure socket connection to Maybank Central Fraud Registry</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Main Form Header -->
+      <div class="portal-header">
+        <div class="secure-badge">
+          <i class="fa-solid fa-shield-halved"></i> Secure Transfer Active
+        </div>
+        <div class="brand-logo">
+          <i class="fa-solid fa-building-columns"></i>
+          <h1><span class="bold">Maybank</span><span class="accent">Secure</span></h1>
+        </div>
+      </div>
+
+      <!-- Welcome Details -->
+      <div class="case-details-box">
+        <div class="welcome-text">
+          Dear <strong id="cust-name-title">Datin Seri Rosnah binti Abdull</strong>, please securely upload your <strong>Fraud SMS Screenshot</strong> and your <strong>Police FIR Report</strong> copy to verify your dispute request.
+        </div>
+        <div class="meta-grid">
+          <div class="meta-item">
+            Disputed Case Ref
+            <span id="meta-case-id">12065</span>
+          </div>
+          <div class="meta-item">
+            Disputed Amount
+            <span id="meta-amount">RM 5,000.00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Form -->
+      <form id="customer-upload-form">
+        
+        <!-- Group 1: SMS Alert Screenshot -->
+        <div class="upload-group">
+          <label class="upload-label" for="sms-file">1. Fraud SMS Alert Screenshot <span style="color:var(--color-warning)">*</span></label>
+          <div class="upload-dropzone" id="sms-dropzone">
+            <input type="file" id="sms-file" accept="image/*" style="display: none;">
+            <i class="fa-solid fa-mobile-screen dropzone-icon"></i>
+            <div class="dropzone-text">Drag & drop SMS screenshot here or click to browse</div>
+            <div class="dropzone-hint">Supports PNG, JPG, JPEG (Max 10MB)</div>
+          </div>
+          
+          <div class="file-preview" id="sms-preview-box">
+            <img src="" id="sms-thumbnail" alt="Preview" class="preview-thumbnail">
+            <div class="preview-info">
+              <div class="preview-name" id="sms-filename">screenshot.png</div>
+              <div class="preview-size" id="sms-filesize">1.4 MB</div>
+            </div>
+            <button type="button" class="remove-file-btn" id="sms-remove-btn"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <!-- Group 2: Police FIR Copy -->
+        <div class="upload-group">
+          <label class="upload-label" for="fir-file">2. Police FIR Report (First Information Report) <span style="color:var(--color-warning)">*</span></label>
+          <div class="upload-dropzone" id="fir-dropzone">
+            <input type="file" id="fir-file" accept="image/*,application/pdf" style="display: none;">
+            <i class="fa-solid fa-file-invoice dropzone-icon"></i>
+            <div class="dropzone-text">Drag & drop Police FIR document here or click to browse</div>
+            <div class="dropzone-hint">Supports PDF, PNG, JPG, JPEG (Max 20MB)</div>
+          </div>
+
+          <div class="file-preview" id="fir-preview-box">
+            <div id="fir-file-icon-box">
+              <img src="" id="fir-thumbnail" alt="Preview" class="preview-thumbnail" style="display:none;">
+              <div class="preview-pdf-icon" id="fir-pdf-icon" style="display:none;"><i class="fa-solid fa-file-pdf"></i></div>
+            </div>
+            <div class="preview-info">
+              <div class="preview-name" id="fir-filename">police_report.pdf</div>
+              <div class="preview-size" id="fir-filesize">3.2 MB</div>
+            </div>
+            <button type="button" class="remove-file-btn" id="fir-remove-btn"><i class="fa-solid fa-trash-can"></i></button>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" id="submit-btn" disabled>
+            <i class="fa-solid fa-lock"></i> Submit Dispute Documents Securely
+          </button>
+        </div>
+      </form>
+
+    </div>
+
+    <!-- Success Feedback View -->
+    <div class="portal-card success-container" id="success-view">
+      <div class="success-icon-wrapper">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div class="success-title">Submission Received</div>
+      <div class="success-desc">
+        Your dispute documentation has been successfully received, encrypted, and attached to your Maybank incident case record.
+      </div>
+      
+      <div class="receipt-card">
+        <div class="receipt-row">
+          <span class="label">Disputed Case Ref</span>
+          <span class="value" id="receipt-case-id">12065</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Customer Name</span>
+          <span class="value" id="receipt-name">Datin Seri Rosnah binti Abdull</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Files Uploaded</span>
+          <span class="value" style="color: var(--color-success);">2 Files (SMS, FIR)</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Transmission Status</span>
+          <span class="value" style="color: var(--color-success);"><i class="fa-solid fa-shield-halved"></i> SECURED</span>
+        </div>
+        <div class="receipt-row">
+          <span class="label">Submission Timestamp</span>
+          <span class="value" id="receipt-date">2026-07-06 10:55:00</span>
+        </div>
+      </div>
+
+      <div class="close-notice">
+        <i class="fa-solid fa-circle-info"></i> Our Fraud Operations team will review these reports. You can close this tab now.
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // App state
+    let caseId = '12065';
+    let customerName = 'Datin Seri Rosnah binti Abdull';
+    let amount = 'RM 5,000.00';
+    
+    let smsFileData = null;
+    let firFileData = null;
+
+    // Parse URL parameters
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.has('caseId')) {
+        caseId = params.get('caseId');
+        document.getElementById('meta-case-id').innerText = caseId;
+      }
+      if (params.has('name')) {
+        customerName = params.get('name');
+        document.getElementById('cust-name-title').innerText = customerName;
+      }
+      if (params.has('amount')) {
+        amount = params.get('amount');
+        document.getElementById('meta-amount').innerText = amount;
+      }
+
+      setupDragAndDrop('sms');
+      setupDragAndDrop('fir');
+      setupFormSubmit();
+    });
+
+    // Drag and drop wiring
+    function setupDragAndDrop(prefix) {
+      const dropzone = document.getElementById(`${prefix}-dropzone`);
+      const fileInput = document.getElementById(`${prefix}-file`);
+
+      // Click to choose file
+      dropzone.addEventListener('click', () => fileInput.click());
+
+      // File input changed
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(prefix, e.target.files[0]);
+        }
+      });
+
+      // Drag enter/over/leave
+      dropzone.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+      });
+
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) {
+          handleFile(prefix, e.dataTransfer.files[0]);
+        }
+      });
+
+      // Remove file action
+      document.getElementById(`${prefix}-remove-btn`).addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeFile(prefix);
+      });
+    }
+
+    // Process selected file
+    function handleFile(prefix, file) {
+      const reader = new FileReader();
+      
+      reader.onload = (e) => {
+        const dataUrl = e.target.result;
+        if (prefix === 'sms') {
+          smsFileData = dataUrl;
+          
+          // Show thumbnail
+          const thumb = document.getElementById('sms-thumbnail');
+          thumb.src = dataUrl;
+          
+          document.getElementById('sms-filename').innerText = file.name;
+          document.getElementById('sms-filesize').innerText = formatSize(file.size);
+        } else {
+          firFileData = dataUrl;
+          
+          const thumb = document.getElementById('fir-thumbnail');
+          const pdfIcon = document.getElementById('fir-pdf-icon');
+          
+          if (file.type === 'application/pdf') {
+            thumb.style.display = 'none';
+            pdfIcon.style.display = 'flex';
+          } else {
+            pdfIcon.style.display = 'none';
+            thumb.src = dataUrl;
+            thumb.style.display = 'block';
+          }
+          
+          document.getElementById('fir-filename').innerText = file.name;
+          document.getElementById('fir-filesize').innerText = formatSize(file.size);
+        }
+
+        // Show preview container and hide dropzone
+        document.getElementById(`${prefix}-preview-box`).style.display = 'flex';
+        document.getElementById(`${prefix}-dropzone`).style.display = 'none';
+
+        checkSubmitStatus();
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    function removeFile(prefix) {
+      if (prefix === 'sms') {
+        smsFileData = null;
+        document.getElementById('sms-file').value = '';
+      } else {
+        firFileData = null;
+        document.getElementById('fir-file').value = '';
+      }
+
+      document.getElementById(`${prefix}-preview-box`).style.display = 'none';
+      document.getElementById(`${prefix}-dropzone`).style.display = 'block';
+      checkSubmitStatus();
+    }
+
+    function checkSubmitStatus() {
+      const submitBtn = document.getElementById('submit-btn');
+      if (smsFileData && firFileData) {
+        submitBtn.removeAttribute('disabled');
+      } else {
+        submitBtn.setAttribute('disabled', 'true');
+      }
+    }
+
+    // Format size
+    function formatSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    // Submit Action
+    function setupFormSubmit() {
+      const form = document.getElementById('customer-upload-form');
+      const overlay = document.getElementById('upload-overlay');
+      const progressFill = document.getElementById('progress-fill');
+      const stepText = document.getElementById('processing-step');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        overlay.style.display = 'flex';
+
+        // Animate simulated upload progress
+        let progress = 0;
+        const steps = [
+          { threshold: 25, label: 'Encrypting documents (AES-256)...' },
+          { threshold: 55, label: 'Packaging secure dispute submission package...' },
+          { threshold: 85, label: 'Transmitting encrypted documents to Maybank Registry...' },
+          { threshold: 100, label: 'Registering security audit trails...' }
+        ];
+
+        const interval = setInterval(() => {
+          progress += Math.floor(Math.random() * 8) + 2;
+          if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            
+            // Save to LocalStorage to notify CRM
+            const storedCase = localStorage.getItem(caseId);
+            let updatedCase = {};
+            if (storedCase) {
+              try {
+                updatedCase = JSON.parse(storedCase);
+              } catch(err) {
+                console.error(err);
+              }
+            }
+
+            updatedCase.caseId = caseId;
+            updatedCase.customerName = customerName;
+            updatedCase.amount = amount;
+            updatedCase.status = 'Uploaded';
+            updatedCase.smsScreenshot = smsFileData;
+            updatedCase.policeFir = firFileData;
+            updatedCase.dateCreated = updatedCase.dateCreated || new Date().toISOString().substring(0, 19).replace('T', ' ');
+            
+            localStorage.setItem(caseId, JSON.stringify(updatedCase));
+
+            // Transmit finished, load success screen
+            setTimeout(() => {
+              overlay.style.display = 'none';
+              document.getElementById('form-view').style.display = 'none';
+              
+              // Fill receipt data
+              document.getElementById('receipt-case-id').innerText = caseId;
+              document.getElementById('receipt-name').innerText = customerName;
+              document.getElementById('receipt-date').innerText = new Date().toLocaleString();
+              
+              document.getElementById('success-view').style.display = 'block';
+            }, 500);
+          }
+
+          progressFill.style.width = `${progress}%`;
+          
+          // Update text based on current progress
+          const currentStep = steps.find(s => progress <= s.threshold);
+          if (currentStep) {
+            stepText.innerText = currentStep.label;
+          }
+        }, 120);
+      });
+    }
+  </script>
+</body>
+</html>
